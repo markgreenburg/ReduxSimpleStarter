@@ -11,8 +11,6 @@ import VideoDetail from './components/videoDetail';
 // Pull in youtube API key and search lib
 import youtube from '../config.js';
 
-
-
 // Create new class component that produces some HTML
 class App extends Component {
   constructor(props) {
@@ -21,10 +19,16 @@ class App extends Component {
       videos: [],
       selectedVideo: null,
     };
+
+    this.videoSearch = this.videoSearch.bind(this);
   }
 
   componentDidMount() {
-    YTSearch({ key: youtube, term: 'surfboards' }, (videos) => {
+    this.videoSearch('surfboards');
+  }
+
+  videoSearch(term) {
+    YTSearch({ key: youtube, term: term }, (videos) => {
       this.setState({
         videos,
         selectedVideo: videos[0],
@@ -35,7 +39,9 @@ class App extends Component {
   render() {
     return (
       <div>
-        <SearchBar />
+        <SearchBar
+          onSearchTermChange={(term) => this.videoSearch(term)}
+        />
         <VideoDetail
           video={this.state.selectedVideo}/>
         <VideoList
