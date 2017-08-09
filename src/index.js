@@ -2,6 +2,7 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import YTSearch from 'youtube-api-search';
+import _ from 'lodash';
 
 // Import subcomponents
 import SearchBar from './components/searchBar';
@@ -37,10 +38,13 @@ class App extends Component {
   }
 
   render() {
+    // Throttle dynamic search & refresh to 500ms
+    const videoSearch = _.debounce((term) => { this.videoSearch(term) }, 500);
+
     return (
       <div>
         <SearchBar
-          onSearchTermChange={(term) => this.videoSearch(term)}
+          onSearchTermChange={videoSearch}
         />
         <VideoDetail
           video={this.state.selectedVideo}/>
